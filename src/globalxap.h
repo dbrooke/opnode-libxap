@@ -64,6 +64,7 @@
 #define SIZEXAPMESS		512	// Maximum length of xAP messages
 #define SIZEXAPKEY		36		// Maximum length of xAP keywords
 #define SIZEXAPADDR		136	// Maximum length of xAP addresses
+#define SIZEXAPUID		40		// Maximum length of xAP UID's
 #define FRECXAPHBEAT		60		// Frequency of heartbeat sends (in seconds)
 #define XAP_VERSION		12		// Version of the xAP specification
 
@@ -91,7 +92,7 @@ unsigned short callBodyTimes;					// Number of studied bodies after inspecting t
 typedef struct {
 	int v;											// xAP version
 	int hop;											// hop-count
-	char uid[40];									// Unique identifier (UID)
+	char uid[SIZEXAPUID];						// Unique identifier (UID)
 	char class[40];								// Message class
 	char source[SIZEXAPADDR];					// Message source
 	char target[SIZEXAPADDR];					// Message target
