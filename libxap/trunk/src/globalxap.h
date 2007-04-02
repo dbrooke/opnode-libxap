@@ -69,7 +69,7 @@
 #define XAP_VERSION		12		// Version of the xAP specification
 
 // Supported xAP classes
-#define UNKNOWN_CLASS	0		// Unknown xAP class
+#define XAP_HBEAT			0		// xAP heartbeat
 #define BSC_COMMAND		1		// xAP BSC command
 #define BSC_QUERY			2		// xAP BSC query
 #define BSC_EVENT			3		// xAP BSC event
