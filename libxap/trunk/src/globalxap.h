@@ -25,6 +25,7 @@
 
 	Last changes:
 
+	04/06/07 by Daniel Berenguer : EPVALULEN = 92 (Ready to support LCD values)
 	03/09/07 by Daniel Berenguer : first version.
 
 ***************************************************************************/
@@ -57,7 +58,7 @@
 #define TRUE 1
 
 #define DEVLENGTH			20		// Maximum length for device names and locations
-#define EPVALULEN			20		// Maximum length for value strings
+#define EPVALULEN			92		// Maximum length for value strings
 
 #define XAP_PORT			3639	// xAP UDP port
 
