@@ -26,6 +26,7 @@
 
 	Last changes:
 
+	10/07/07 by Daniel Berenguer : Allow extended UID's
 	03/09/07 by Daniel Berenguer : first version.
 
 ***************************************************************************/
@@ -238,7 +239,7 @@ char * xapReadHead(int fdSocket, xaphead *header)
 				// UID?
 				if (!strcasecmp(strKey, "uid"))
 				{
-					if (strlen(strValue) != 8)
+					if (strlen(strValue) >= sizeof(header->uid))
 						return NULL;
 					strcpy(header->uid, strValue);			// Store the UID in the struct
 					flgDataCheck |= 0x04;						// Third bit on
@@ -307,12 +308,6 @@ char * xapReadHead(int fdSocket, xaphead *header)
 			if (flgDataCheck != 0x3F)	// 0x3F = 00111111b
 				return NULL;
 		}
-		// For any other message class accepted by our device, the target field must not be present
-		else
-		{
-			if (flgDataCheck != 0x1F)	// 0x3F = 00011111b
-				return NULL;
-		}
 	}
 
 	return pStr1+2;		// Return pointer to the body
@@ -334,7 +329,7 @@ char * xapReadHead(int fdSocket, xaphead *header)
 //						results
 //
 // Returns:
-//		1 if the message is addressed to "address"
+//		1 if the message is addressed to our device
 //		0 otherwise
 //*************************************************************************
 
@@ -429,9 +424,10 @@ short int xapEvalTarget(char *strTarget, char *strVendor, char *strDevice, char 
 			strcpy(endp->location, "*");	// For every location
 			strcpy(endp->name, "*");		// For every endpoint name
 		}
+		return 1;	// Address match. endp contains the targeted endpoint
 	}
 
-	return 1;	// Address match. endp contains the targeted endpoint
+	return 0;	// Address does not match
 }
 
 //*************************************************************************

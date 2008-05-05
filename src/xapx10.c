@@ -100,7 +100,7 @@ short int xapReadX10Body(int fdSocket, char *pBody, xaphead header, char *devlis
 		// Capture the key string
 		if ((pStr2 = strchr(pStr1, '=')) == NULL)
 			return 0;
-		if ((intLen = pStr2 - pStr1) >= sizeof(strKey))			// Only within the limits od strKey
+		if ((intLen = pStr2 - pStr1) >= sizeof(strKey))			// Only within the limits of strKey
 			return 0;
 		strncpy(strKey, pStr1, intLen);								// Copy the key string into strKey
 		strKey[intLen] = 0;												// Terminate the string
@@ -126,7 +126,7 @@ short int xapReadX10Body(int fdSocket, char *pBody, xaphead header, char *devlis
 				// command to be executed?
 				if (!strcasecmp(strKey, "command"))
 				{
-					if (strlen(strValue) > sizeof(strCommand))
+					if (strlen(strValue) >= sizeof(strCommand))
 						return 0;
 					//Only allowed commands
 					if (strcasecmp(strValue, "ON") && strcasecmp(strValue, "OFF") && strcasecmp(strValue, "DIM") &&
@@ -149,7 +149,7 @@ short int xapReadX10Body(int fdSocket, char *pBody, xaphead header, char *devlis
 				// Device?
 				if (!strcasecmp(strKey, "device"))
 				{
-					if (strlen(strValue) > sizeof(strDevList))
+					if (strlen(strValue) >= sizeof(strDevList))
 						return 0;
 					strcpy(strDevList, strValue);						// Store the list of devices
 					flgDataCheck |= 0x02;								// Second bit on
@@ -159,7 +159,7 @@ short int xapReadX10Body(int fdSocket, char *pBody, xaphead header, char *devlis
 				// Event?
 				if (!strcasecmp(strKey, "event"))
 				{
-					if (strlen(strValue) > sizeof(strCommand))
+					if (strlen(strValue) >= sizeof(strCommand))
 						return 0;
 					strcpy(strCommand, strValue);						// Store the command string
 					flgDataCheck |= 0x04;								// Third bit on

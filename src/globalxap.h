@@ -25,6 +25,9 @@
 
 	Last changes:
 
+	04/06/08 by Daniel Berenguer : web.service schema
+	04/22/07 by Daniel Berenguer : SMS functions added
+	04/15/07 by Daniel Berenguer : Type of endpoint added
 	04/06/07 by Daniel Berenguer : EPVALULEN = 92 (Ready to support LCD values)
 	03/09/07 by Daniel Berenguer : first version.
 
@@ -68,6 +71,7 @@
 #define SIZEXAPUID		40		// Maximum length of xAP UID's
 #define FRECXAPHBEAT		60		// Frequency of heartbeat sends (in seconds)
 #define XAP_VERSION		12		// Version of the xAP specification
+#define SIZEXAPNAME		32		// Maximum length of xAP application names
 
 // Supported xAP classes
 #define XAP_HBEAT			0		// xAP heartbeat
@@ -77,6 +81,11 @@
 #define BSC_INFO			4		// xAP BSC info
 #define X10_REQUEST		5		// xAP X10 command
 #define X10_EVENT			6		// xAP X10 event
+#define XAP_SHUTDWN		7		// xAP shutdown
+#define SMS_MESSAGE		8		// xAP SMS message
+#define WEB_REQUEST		9		// Web service request
+#define WEB_START			10		// Web service start
+#define WEB_STOP			11		// Web service stop
 
 //*************************************************************************
 //*************************************************************************
@@ -107,6 +116,10 @@ typedef struct {
 	char value[EPVALULEN];						// Value
 	char state[7];									// on, off, toggle
 	int UIDsub;										// UID subaddress number (2-digit hexadecimal code)
+	BYTE type;										// Type of endpoint: 0=binary input; 1=binary output; 2=level/text input; 3=level/text output
+	BYTE nu1;
+	BYTE nu2;
+	BYTE nu3;
 } xAPendp;
 
 
@@ -138,5 +151,18 @@ short int xapSendBSCqry(int fdSocket, char *strSource, char *strUID, char *strTa
 short int xapReadX10Body(int fdSocket, char *pBody, xaphead header, char *devlist, char *command, BYTE *level);
 short int xapSendX10evn(int fdSocket, char *strDevice, char *strUID, char *device, char *command, BYTE level);
 short int xapSendX10req(int fdSocket, char *strDevice, char *strUID, char *strTarget, char *device, char *command, BYTE level);
+
+// xapsms.c functions:
+//-------------------------
+short int xapReadSMSBody(int fdSocket, char *pBody, char *phoneNum, char *SMStext, BYTE *flgIncoming);
+short int xapSendSMSreceipt(int fdSocket, char *strSource, char *strUID, char *phoneNum, char *SMStext, BYTE flgSent, char *strError);
+short int xapSendSMSinbound(int fdSocket, char *strSource, char *strUID, char *phoneNum, char *SMStext);
+short int xapSendSMSoutbound(int fdSocket, char *strSource, char *strUID, char *strTarget, char *phoneNum, char *SMStext);
+
+// xapintranet.c functions:
+//-------------------------
+short int xapReadWebBody(int fdSocket, char *pBody, char *name, char *desc, char *pc, char *icon, char *url, BYTE *type);
+short int xapSendWebService(int fdSocket, char *strSource, char *strUID, char *strName, char *strDesc, char *strPC, char *strIcon, char *strURL, char* type);
+short int xapSendWebRequest(int fdSocket, char *strSource, char *strUID);
 
 #endif
