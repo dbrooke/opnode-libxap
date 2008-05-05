@@ -25,6 +25,7 @@
 
 	Last changes:
 
+	04/15/07 by Daniel Berenguer : Type of endpoint added
 	03/09/07 by Daniel Berenguer : first version.
 
 ***************************************************************************/
@@ -91,9 +92,15 @@ char *xapReadBscBody(int fdSocket, char *pBody, xaphead header, xAPendp *endp)
 	{
 		//Verify the body tittle
 		if (!strncasecmp(pStr1, "input.state\n{\n", 14))
+		{
+			endp->type = 0;		// input
 			pStr1 += 14;			// Place the pointer inside the body section
+		}
 		else if (!strncasecmp(pStr1, "output.state\n{\n", 15))
+		{
+			endp->type = 1;		// output
 			pStr1 += 15;			// Place the pointer inside the body section
+		}
 		else
 			return NULL;
 	}
@@ -171,7 +178,7 @@ char *xapReadBscBody(int fdSocket, char *pBody, xaphead header, xAPendp *endp)
 					if (strlen(strValue) >= sizeof(endp->state))
 						return NULL;
 					// Store "state" as value only if there is no "text" nor "level" in the body
-					if (!(flgDataCheck & 0x06))				// If "text" or "level" has not been previously detected
+					if (!(flgDataCheck & 0x06))				// If "text" nor "level" have not been previously detected
 						strcpy(endp->value, strValue);		// Store the state as value in the struct
 					// Store "state" as state
 					strcpy(endp->state, strValue);
@@ -183,6 +190,10 @@ char *xapReadBscBody(int fdSocket, char *pBody, xaphead header, xAPendp *endp)
 				break;
 		}
 	}
+
+	// If the body contains a "text"/"level" field
+	if (flgDataCheck & 0x06)
+		endp->type += 2;	// 0=binary input; 1=binary output; 2=level/text input; 3=level/text output
 
 	// If xAP BSC command and no "id" found in the body
 	if (!strcasecmp(header.class, "xAPBSC.cmd") && !(flgDataCheck & 0x01))

@@ -43,11 +43,13 @@ compile: $(binaries)
 # using dependencies to library files not necessary as they are requested
 # to be unchanged
 
-libxap.a:: xapcommon.o xapbsc.o xapx10.o
+libxap.a:: xapcommon.o xapbsc.o xapx10.o xapintranet.o xapsms.o
 	$(AR) crv $@ $^
 xapcommon.o:: xapcommon.c globalxap.h
 xapbsc.o:: xapbsc.c globalxap.h
 xapx10.o:: xapx10.c globalxap.h
+xapintranet.o:: xapintranet.c globalxap.h
+xapsms.o:: xapsms.c globalxap.h
 
 clean::
 	rm -f core *.o $(binaries) $(addsuffix .gdb, $(binaries))
