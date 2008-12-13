@@ -63,7 +63,7 @@
 
 short int xapReadWebBody(int fdSocket, char *pBody, char *name, char *desc, char *pc, char *icon, char *url, BYTE *type)
 {
-	char strName[SIZEXAPNAME];		// Name of application
+	char strName[SIZEXAPNAME];			// Name of application
 	char strDesc[SIZEXAPADDR];			// Description
 	char strPC[SIZEXAPNAME];			// Name of PC
 	char strIcon[SIZEXAPADDR];			// icon
